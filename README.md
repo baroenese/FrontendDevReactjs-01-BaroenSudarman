@@ -6,11 +6,15 @@
 - NextJs v14 [Docs](https://nextjs.org/)
 - swr v2 [Docs](https://swr.vercel.app/)
 - zod v3 [Docs](https://zod.dev/)
+- npm (bawaan pada saat menginstall noejs)
 
 Aplikasi ini di hosting pada vercel
 [Test demo app](https://frontend-dev-reactjs-01-baroen-sudarman.vercel.app/)
 
 ## Cara menjalankan pada local
+
+#### Proyek ini menggunakan NPM untuk menjalankan aplikasi
+
 ```
 # clone and install aplikasi
 # jalanklan perintah
