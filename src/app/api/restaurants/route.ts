@@ -1,6 +1,6 @@
 import { validationRestaurantListSuccessResponses } from "./validator"
 
-const GET_LIST_RESTAURANT = `https://restaurant-api.dicoding.dev/list`
+const GET_LIST_RESTAURANT = `https://restaurant-api.dicoding.dev/search`
 
 function generateRandomPrice(min: number, max: number): number {
     const randomValue = Math.random() * (max - min) + min;
@@ -10,8 +10,6 @@ function generateRandomPrice(min: number, max: number): number {
 function generateRandomBoolean(): boolean {
     return Math.random() >= 0.5;
 }
-
-export const dynamic = "force-dynamic"
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
@@ -25,12 +23,19 @@ export async function GET(req: Request) {
         method: "GET",
     } satisfies RequestInit
 
-    const res = await fetch(`${GET_LIST_RESTAURANT}?q=${querySearch}`, requestOptions)
+    const res = await fetch(
+        querySearch ? `${GET_LIST_RESTAURANT}?q=${querySearch}` : GET_LIST_RESTAURANT,
+        requestOptions
+    )
+    // console.log("===============res", await res.json())
+    // return Response.json({
+    //     data: null
+    // })
     // Baris ini akan menghasilkan "Error langsung" pada client
     if (!res.ok) throw new Error("Data tidak ditemukan")
     // Validatio success data
     const validation = validationRestaurantListSuccessResponses(await res.json())
-    if (!validation.success) throw new Error("Data tidak ditemukan")
+    if (!validation.success) throw new Error(`Error validation ${validation.error.toString()}`)
     const { restaurants, ...itemWithoutRestaurants } = validation.data
 
     const result = restaurants.map((item) => {
@@ -39,9 +44,12 @@ export async function GET(req: Request) {
             price: generateRandomPrice(100, 200),
             is_close: generateRandomBoolean(),
         }
-    })    
+    })  
+
     return Response.json({
         ...itemWithoutRestaurants,
+        message: "success",
+        count: itemWithoutRestaurants?.founded || 0,
         restaurants: result,
     })
 }

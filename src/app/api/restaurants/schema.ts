@@ -11,8 +11,8 @@ export const RestaurantSchema = z.object({
 
 export const RestaurantListSuccessResponsesSchema = z.object({
     error: z.literal(false),
-    message: z.literal("success"),
-    count: z.number(),
+    message: z.literal("success").optional(),
+    count: z.number().optional(),
     founded: z.number().optional(),
     restaurants: z.array(RestaurantSchema),
 })
